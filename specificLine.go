@@ -3,6 +3,8 @@ package picasso
 import (
 	"bufio"
 	"io"
+	"fmt"
+	"os"
 )
 
 func ReadLine(theFile io.Reader, lineNum int) string {
@@ -15,5 +17,7 @@ func ReadLine(theFile io.Reader, lineNum int) string {
 		}
 
 	}
-	return "reached end of file"
+	fmt.Println("Error in file holding ascii, make sure it's the same as in the repo")
+	os.Exit(0)
+	return ""
 }

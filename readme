@@ -67,7 +67,7 @@ $$@@$$$$$$$$``````````@@$$@@$$$$$$
 |_____| |_| |_| |___/  \__| |_|     \__,_|  \___|  \__| |_|  \___/  |_| |_| |___/ 
                                                                                   
                                                                                   
-1- make sure you have installed the main.go, standard.txt and specificline.go file and the go.mod file. and keep the main.go and standard.txt in a folder with any name you want
+1- make sure you have installed the main.go, standard.txt, specificline.go, allEmpty.go file and the go.mod file. and keep the main.go and standard.txt in a folder with any name you want
 
 2-open the terminal and make sure you are in the folder you kept main.go in
 

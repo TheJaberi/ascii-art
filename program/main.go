@@ -25,6 +25,8 @@ func main() {
 	// Get the input text from command-line argument
 	str := os.Args[1]
 
+   
+
 	// Validate characters in the input text
 	for _, letter := range str {
 		if letter < ' ' || letter > '~' {
@@ -33,8 +35,11 @@ func main() {
 		}
 	}
 
-	// Split the input text into words
+	// Split the input text into words and check if it contains only new lines
 	words := strings.Split(str, "\\n")
+	 if picasso.AllEmpty(words){
+        words = words[1:]
+    }
 
 	// Iterate over each word in the input text
 	for current, currentWord := range words {

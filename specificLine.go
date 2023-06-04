@@ -15,5 +15,5 @@ func ReadLine(theFile io.Reader, lineNum int) string {
 		}
 
 	}
-	return ""
+	return "reached end of file"
 }

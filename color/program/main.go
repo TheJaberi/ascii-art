@@ -1,18 +1,29 @@
 package main
 
 import (
+	"color"
+	"flag"
 	"fmt"
 	"os"
-	"color"
 	"strings"
 )
 
 func main() {
 	// Check the number of command-line arguments
-	if len(os.Args) != 2 {
+	if len(os.Args) <= 2 {
 		fmt.Println("Usage: go run . <text>")
 		return
 	}
+
+	colorFlag := flag.String("color", "white", "Specify the color") // Define a string flag named "color" with a default value of "red"
+
+	flag.Parse() // Parse the command-line flags
+
+	chosencolor := *colorFlag // Access the value of the "color" flag
+
+	textColor := color.ColorSelector(chosencolor)
+
+	fmt.Print(textColor)
 
 	// Open the "standard.txt" file
 	file, err := os.Open("standard.txt")
@@ -25,8 +36,6 @@ func main() {
 	// Get the input text from command-line argument
 	str := os.Args[1]
 
-   
-
 	// Validate characters in the input text
 	for _, letter := range str {
 		if letter < ' ' || letter > '~' {
@@ -37,9 +46,9 @@ func main() {
 
 	// Split the input text into words and check if it contains only new lines
 	words := strings.Split(str, "\\n")
-	 if color.AllEmpty(words){
-        words = words[1:]
-    }
+	if color.AllEmpty(words) {
+		words = words[1:]
+	}
 
 	// Iterate over each word in the input text
 	for current, currentWord := range words {

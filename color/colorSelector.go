@@ -8,5 +8,5 @@ func ColorSelector(str string) string {
 	case "black":
 		return "\x1b[30m"
 	}
-	return ""
+	return "\x1b[37m"
 }

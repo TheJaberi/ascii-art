@@ -2,29 +2,122 @@ package main
 
 import (
 	"color"
-	"flag"
 	"fmt"
 	"os"
 	"strings"
 )
 
 func main() {
+	var colorFlagCount = 0
+	var colorFlag string
+	var pos int
+	var str string
+	var specified string
+	var specific = false
 	// Check the number of command-line arguments
-	if len(os.Args) <= 2 {
-		fmt.Println("Usage: go run . <text>")
+	if len(os.Args) < 2 || len(os.Args) > 4 {
+		fmt.Println("Usage:\ngo run . <text>\ngo run . --color=<color> <text>\ngo run . --color=<color> <specific letters> <text>")
 		return
+	} else if len(os.Args) == 2  {
+		if strings.HasPrefix(os.Args[1], "--color="){
+			fmt.Println("Usage:\ngo run . <text>\ngo run . --color=<color> <text>\ngo run . --color=<color> <specific letters> <text>")
+			return
+		}
+		str = os.Args[1]
+	}else if len(os.Args) == 3 {
+		for i, arg := range os.Args[1:] {
+			if strings.HasPrefix(arg, "--color=") {
+				colorFlag = strings.TrimPrefix(arg, "--color=")
+				pos = i
+				colorFlagCount++
+			}
+		}
+		if colorFlagCount < 1 || colorFlagCount > 1 {
+			fmt.Println("Usage:\ngo run . <text>\ngo run . --color=<color> <text>\ngo run . --color=<color> <specific letters> <text>")
+			return
+		}
+		if pos == 1 {
+			str = os.Args[2]
+			
+		}else {
+			str = os.Args[1]
+		}
+	} else if len(os.Args) == 4 {
+		for i, arg := range os.Args {
+			if strings.HasPrefix(arg, "--color=") {
+				colorFlag = strings.TrimPrefix(arg, "--color=")
+				pos = i
+				colorFlagCount++
+			}
+		}
+		if colorFlagCount < 1 || colorFlagCount > 1 {
+			fmt.Println("Usage:\ngo run . <text>\ngo run . --color=<color> <text>\ngo run . --color=<color> <specific letters> <text>")
+			return
+		}
+		if pos == 1 {
+			if len(os.Args[2]) > len(os.Args[3]) {
+				if color.ContainsSubstring(os.Args[2], os.Args[3]){
+				str = os.Args[2]
+				specified = os.Args[3]
+				} else {
+					fmt.Println("you specified something unavailable")
+					return
+				}
+			} else {
+				if color.ContainsSubstring(os.Args[3], os.Args[2]){
+					str = os.Args[3]
+					specified = os.Args[2]
+					} else {
+						fmt.Println("you specified something unavailable")
+						return
+					}
+			}
+		} else if pos == 2 {
+			if len(os.Args[1]) > len(os.Args[3]) {
+				if color.ContainsSubstring(os.Args[2], os.Args[3]){
+				str = os.Args[1]
+				specified = os.Args[3]
+				} else {
+					fmt.Println("you specified something unavailable")
+					return
+				}
+			} else {
+				if color.ContainsSubstring(os.Args[3], os.Args[2]){
+					str = os.Args[3]
+					specified = os.Args[1]
+					} else {
+						fmt.Println("you specified something unavailable")
+						return
+					}
+			}
+		}else {
+			if len(os.Args[1]) > len(os.Args[2]) {
+				if color.ContainsSubstring(os.Args[1], os.Args[2]){
+				str = os.Args[1]
+				specified = os.Args[2]
+				} else {
+					fmt.Println("you specified something unavailable")
+					return
+				}
+			} else {
+				if color.ContainsSubstring(os.Args[2], os.Args[1]){
+					str = os.Args[2]
+					specified = os.Args[1]
+					} else {
+						fmt.Println("you specified something unavailable")
+						return
+					}
+			}
+		}
+		specific = true
 	}
 
-	colorFlag := flag.String("color", "white", "Specify the color") // Define a string flag named "color" with a default value of "red"
-
-	flag.Parse() // Parse the command-line flags
-
-	chosencolor := *colorFlag // Access the value of the "color" flag
-
-	textColor := color.ColorSelector(chosencolor)
-
-	fmt.Print(textColor)
-
+	if specific {
+	fmt.Println(specified)
+	}
+	fmt.Println(colorFlag)
+	
+	
 	// Open the "standard.txt" file
 	file, err := os.Open("standard.txt")
 	if err != nil {
@@ -32,9 +125,7 @@ func main() {
 		return
 	}
 	defer file.Close()
-
-	// Get the input text from command-line argument
-	str := os.Args[1]
+	
 
 	// Validate characters in the input text
 	for _, letter := range str {

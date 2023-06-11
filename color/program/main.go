@@ -7,26 +7,6 @@ import (
 	"strings"
 )
 
-// FindGroupedWord searches for the grouped word in str and returns a slice of starting and ending indices.
-func FindGroupedWord(groupedWord string, str string) [][]int {
-	var indices [][]int
-	start := -1
-	offset := 0
-
-	for {
-		start = strings.Index(str[offset:], groupedWord)
-		if start == -1 {
-			break
-		}
-		start += offset
-		end := start + len(groupedWord) - 1
-		indices = append(indices, []int{start, end})
-		offset = end + 1
-	}
-
-	return indices
-}
-
 func main() {
 	var colorFlagCount = 0
 	var colorFlag string
@@ -35,11 +15,45 @@ func main() {
 	var specified string
 	var specific = false
 	var isWithinRange bool
+	var outflag = false
+	var outputFlag = ""
 	var indices [][]int
+	var outputArray []string
+	var currentLine string
+	var fileName = "standard.txt"
 
 	// Check the number of command-line arguments
-	if len(os.Args) < 2 || len(os.Args) > 4 {
-		fmt.Println("Usage:\ngo run . [OPTION] [STRING]\nExample: go run . --color=red Hello")
+	if len(os.Args) < 2 || len(os.Args) > 6 {
+		fmt.Println("Usage:\ngo run . [OPTION] [STYLE] [STRING]\nExample: go run . --color=red standard Hello")
+		return
+	}
+
+	// Identify and remove style argument
+	for i, arg := range os.Args {
+		if arg == "standard" || arg == "shadow" || arg == "thinkertoy" {
+			fileName = arg + ".txt"
+			// Remove the style argument from os.Args
+			os.Args = append(os.Args[:i], os.Args[i+1:]...)
+			break
+		}
+	}
+
+	for i, arg := range os.Args {
+		if strings.HasPrefix(arg, "--output=") {
+			outputFlag = strings.TrimPrefix(arg, "--output=")
+			if outputFlag == "" {
+				return
+			} else if !strings.HasSuffix(outputFlag, ".txt"){
+				outputFlag += ".txt"
+			}
+			os.Args = append(os.Args[:i], os.Args[i+1:]...)
+			outflag = true
+			break
+		}
+	}
+
+	if fileName == "" {
+		fmt.Println("Please specify a valid style: standard, shadow, or thinkertoy.")
 		return
 	} else if len(os.Args) == 2 {
 		if strings.HasPrefix(os.Args[1], "--color=") {
@@ -135,8 +149,8 @@ func main() {
 		specific = true
 	}
 
-	// Open the "standard.txt" file
-	file, err := os.Open("standard.txt")
+	// Open the file
+	file, err := os.Open(fileName)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return
@@ -167,7 +181,7 @@ func main() {
 
 		// Check if the specified string is a grouped word in the current word
 		if specific {
-			indices = FindGroupedWord(specified, currentWord)
+			indices = color.FindGroupedWord(specified, currentWord)
 		}
 
 		// Display each line of the stylized text for the current word
@@ -192,7 +206,9 @@ func main() {
 				}
 
 				// Apply the specified color if the current index is within the range, otherwise apply the default color
-				if specific && isWithinRange {
+				if outflag {
+					currentLine += line
+				} else if specific && isWithinRange {
 					fmt.Print(color.ColorSelector(colorFlag) + line + color.ColorSelector("reset"))
 					isWithinRange = false
 				} else if !specific && colorFlagCount == 1 {
@@ -201,7 +217,19 @@ func main() {
 					fmt.Print(line)
 				}
 			}
-			fmt.Println()
+			if outflag {
+				outputArray = append(outputArray, currentLine)
+				currentLine = ""
+			} else if !outflag {
+				fmt.Println()
+			}
+		}
+	}
+	if outflag {
+	err := color.PrintArrayToFile(outputArray, outputFlag)
+		if err != nil {
+			fmt.Println("Error:", err)
+		return
 		}
 	}
 }

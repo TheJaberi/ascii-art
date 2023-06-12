@@ -16,7 +16,9 @@ func main() {
 	var specific = false
 	var isWithinRange bool
 	var outflag = false
+	var revflag = false
 	var outputFlag = ""
+	var reverseFlag = ""
 	var indices [][]int
 	var outputArray []string
 	var currentLine string
@@ -27,6 +29,52 @@ func main() {
 		fmt.Println("Usage:\ngo run . [OPTION] [STYLE] [STRING]\nExample: go run . --color=red standard Hello")
 		return
 	}
+
+	//check for reverse
+	for i, arg := range os.Args {
+		if strings.HasPrefix(arg, "--reverse=") {
+			reverseFlag = strings.TrimPrefix(arg, "--reverse=")
+			if reverseFlag == "" {
+				return
+			} else if !strings.HasSuffix(reverseFlag, ".txt"){
+				reverseFlag += ".txt"
+			}
+			os.Args = append(os.Args[:i], os.Args[i+1:]...)
+			revflag = true
+			break
+		}
+	}
+	if revflag == true {
+		if len(os.Args) != 1 {
+			fmt.Println("when using the reverse flag you should only have one argument which is the flag")
+			return
+		}
+		revfile, err := os.Open(reverseFlag)
+		if err != nil {
+			fmt.Println("Error opening file:", err)
+			return
+		}
+		defer revfile.Close()
+		//make the input into a 2d array
+		inputArray := color.ReadInput(revfile)
+
+		//make the 2d array as a 1d array joined by "\n"
+		inputAsLine := color.ColumnSlicer(inputArray)
+
+		// Open the file
+		file, err := os.Open(fileName)
+		if err != nil {
+			fmt.Println("Error opening file:", err)
+			return
+		}
+		defer file.Close()
+		asciiArray := color.LinesToArray(file)
+
+		fmt.Println(color.Compare(inputAsLine, asciiArray))
+
+		return
+	}
+
 
 	// Identify and remove style argument
 	for i, arg := range os.Args {

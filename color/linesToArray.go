@@ -1,4 +1,4 @@
-package reverse
+package color
 
 import (
 	"bufio"
@@ -10,7 +10,7 @@ import (
 // ReadLines reads all lines from the given file (io.Reader) and returns them as a slice of strings.
 // Each line of the file is stored in an index of the slice.
 // If an error occurs during file reading, it prints an error message and exits the program.
-func ReadLines(theFile io.Reader) []string {
+func LinesToArray(theFile io.Reader) []string {
 	sc := bufio.NewScanner(theFile)
 	var lines []string
 	for sc.Scan() {

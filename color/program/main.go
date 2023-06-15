@@ -49,28 +49,28 @@ func main() {
 			fmt.Println("when using the reverse flag you should only have one argument which is the flag")
 			return
 		}
-		revfile, err := os.Open(reverseFlag)
+		revfile, err := os.ReadFile(reverseFlag)
 		if err != nil {
 			fmt.Println("Error opening file:", err)
 			return
 		}
-		defer revfile.Close()
 		//make the input into a 2d array
-		inputArray := color.ReadInput(revfile)
+		//inputArray := color.ReadInput(revfile)
 
 		//make the 2d array as a 1d array joined by "\n"
-		inputAsLine := color.ColumnSlicer(inputArray)
+		//inputAsLine := color.ColumnSlicer(inputArray)
 
 		// Open the file
-		file, err := os.Open(fileName)
+		file, err := os.ReadFile(fileName)
 		if err != nil {
 			fmt.Println("Error opening file:", err)
 			return
 		}
-		defer file.Close()
-		asciiArray := color.LinesToArray(file)
 
-		fmt.Println(color.Compare(inputAsLine, asciiArray))
+		color.ReverseAsciiArt(revfile, file)
+		//asciiArray := color.LinesToArray(file)
+
+		//fmt.Println(color.Compare(inputAsLine, asciiArray))
 
 		return
 	}

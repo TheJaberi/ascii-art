@@ -32,8 +32,8 @@ func main() {
 
 	//check for reverse
 	for i, arg := range os.Args {
-		if strings.HasPrefix(arg, "--reverse=") {
-			reverseFlag = strings.TrimPrefix(arg, "--reverse=")
+		if strings.HasPrefix(strings.ToLower(arg), "--reverse=") {
+			reverseFlag = strings.TrimPrefix(strings.ToLower(arg), "--reverse=")
 			if reverseFlag == "" {
 				return
 			} else if !strings.HasSuffix(reverseFlag, ".txt"){
@@ -78,7 +78,7 @@ func main() {
 
 	// Identify and remove style argument
 	for i, arg := range os.Args {
-		if arg == "standard" || arg == "shadow" || arg == "thinkertoy" {
+		if strings.ToLower(arg) == "standard" || strings.ToLower(arg) == "shadow" || strings.ToLower(arg) == "thinkertoy" {
 			fileName = arg + ".txt"
 			// Remove the style argument from os.Args
 			os.Args = append(os.Args[:i], os.Args[i+1:]...)
@@ -87,8 +87,8 @@ func main() {
 	}
 
 	for i, arg := range os.Args {
-		if strings.HasPrefix(arg, "--output=") {
-			outputFlag = strings.TrimPrefix(arg, "--output=")
+		if strings.HasPrefix(strings.ToLower(arg), "--output=") {
+			outputFlag = strings.TrimPrefix(strings.ToLower(arg), "--output=")
 			if outputFlag == "" {
 				return
 			} else if !strings.HasSuffix(outputFlag, ".txt"){
@@ -104,7 +104,7 @@ func main() {
 		fmt.Println("Please specify a valid style: standard, shadow, or thinkertoy.")
 		return
 	} else if len(os.Args) == 2 {
-		if strings.HasPrefix(os.Args[1], "--color=") {
+		if strings.HasPrefix(strings.ToLower(os.Args[1]), "--color=") {
 			fmt.Println("you cannot have a flag as something to print")
 			return
 		} else {
@@ -112,8 +112,8 @@ func main() {
 		}
 	} else if len(os.Args) == 3 {
 		for i, arg := range os.Args {
-			if strings.HasPrefix(arg, "--color=") {
-				colorFlag = strings.TrimPrefix(arg, "--color=")
+			if strings.HasPrefix(strings.ToLower(arg), "--color=") {
+				colorFlag = strings.TrimPrefix(strings.ToLower(arg), "--color=")
 				pos = i
 				colorFlagCount++
 			}
@@ -129,8 +129,8 @@ func main() {
 		}
 	} else if len(os.Args) == 4 {
 		for i, arg := range os.Args {
-			if strings.HasPrefix(arg, "--color=") {
-				colorFlag = strings.TrimPrefix(arg, "--color=")
+			if strings.HasPrefix(strings.ToLower(arg), "--color=") {
+				colorFlag = strings.TrimPrefix(strings.ToLower(arg), "--color=")
 				pos = i
 				colorFlagCount++
 			}

@@ -1,4 +1,4 @@
-package color
+package ascii
 // containsSubstring checks if a string contains a specific substring.
 func ContainsSubstring(str, substr string) bool {
 	for i := 0; i < len(str)-len(substr)+1; i++ {

@@ -1,4 +1,4 @@
-package picasso
+package ascii
 
 // AllEmpty checks if all elements in the given string slice are empty strings.
 // It returns true if all elements are empty, and false otherwise.

@@ -1,4 +1,4 @@
-package picasso
+package ascii
 
 import (
 	"bufio"

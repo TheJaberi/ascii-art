@@ -1,7 +1,7 @@
 package main
 
 import (
-	"color"
+	"ascii"
 	"fmt"
 	"os"
 	"strings"
@@ -26,7 +26,7 @@ func main() {
 
 	// Check the number of command-line arguments
 	if len(os.Args) < 2 || len(os.Args) > 6 {
-		fmt.Println("Usage:\ngo run . [OPTION] [STYLE] [STRING]\nExample: go run . --color=red standard Hello")
+		fmt.Println("Go through read me file for usage")
 		return
 	}
 
@@ -67,7 +67,7 @@ func main() {
 			return
 		}
 
-		color.ReverseAsciiArt(revfile, file)
+		ascii.ReverseAsciiArt(revfile, file)
 		//asciiArray := color.LinesToArray(file)
 
 		//fmt.Println(color.Compare(inputAsLine, asciiArray))
@@ -119,7 +119,7 @@ func main() {
 			}
 		}
 		if colorFlagCount < 1 || colorFlagCount > 1 {
-			fmt.Println("Usage:\ngo run . [OPTION] [STRING]\nExample: go run . --color=red Hello")
+			fmt.Println("Go through read me file for usage")
 			return
 		}
 		if pos == 1 {
@@ -136,12 +136,12 @@ func main() {
 			}
 		}
 		if colorFlagCount < 1 || colorFlagCount > 1 {
-			fmt.Println("Usage:\ngo run . [OPTION] [STRING]\nExample: go run . --color=red eeetee")
+			fmt.Println("Go through read me file for usage")
 			return
 		}
 		if pos == 1 {
 			if len(os.Args[2]) > len(os.Args[3]) {
-				if color.ContainsSubstring(os.Args[2], os.Args[3]) {
+				if ascii.ContainsSubstring(os.Args[2], os.Args[3]) {
 					str = os.Args[2]
 					specified = os.Args[3]
 				} else {
@@ -149,7 +149,7 @@ func main() {
 					return
 				}
 			} else {
-				if color.ContainsSubstring(os.Args[3], os.Args[2]) {
+				if ascii.ContainsSubstring(os.Args[3], os.Args[2]) {
 					str = os.Args[3]
 					specified = os.Args[2]
 				} else {
@@ -159,7 +159,7 @@ func main() {
 			}
 		} else if pos == 2 {
 			if len(os.Args[1]) > len(os.Args[3]) {
-				if color.ContainsSubstring(os.Args[1], os.Args[3]) {
+				if ascii.ContainsSubstring(os.Args[1], os.Args[3]) {
 					str = os.Args[1]
 					specified = os.Args[3]
 				} else {
@@ -167,7 +167,7 @@ func main() {
 					return
 				}
 			} else {
-				if color.ContainsSubstring(os.Args[3], os.Args[1]) {
+				if ascii.ContainsSubstring(os.Args[3], os.Args[1]) {
 					str = os.Args[3]
 					specified = os.Args[1]
 				} else {
@@ -177,7 +177,7 @@ func main() {
 			}
 		} else {
 			if len(os.Args[1]) > len(os.Args[2]) {
-				if color.ContainsSubstring(os.Args[1], os.Args[2]) {
+				if ascii.ContainsSubstring(os.Args[1], os.Args[2]) {
 					str = os.Args[1]
 					specified = os.Args[2]
 				} else {
@@ -185,7 +185,7 @@ func main() {
 					return
 				}
 			} else {
-				if color.ContainsSubstring(os.Args[2], os.Args[1]) {
+				if ascii.ContainsSubstring(os.Args[2], os.Args[1]) {
 					str = os.Args[2]
 					specified = os.Args[1]
 				} else {
@@ -215,7 +215,7 @@ func main() {
 
 	// Split the input text into words and check if it contains only new lines
 	words := strings.Split(str, "\\n")
-	if color.AllEmpty(words) {
+	if ascii.AllEmpty(words) {
 		words = words[1:]
 	}
 
@@ -229,7 +229,7 @@ func main() {
 
 		// Check if the specified string is a grouped word in the current word
 		if specific {
-			indices = color.FindGroupedWord(specified, currentWord)
+			indices = ascii.FindGroupedWord(specified, currentWord)
 		}
 
 		// Display each line of the stylized text for the current word
@@ -243,7 +243,7 @@ func main() {
 				}
 
 				// Read the appropriate line from the "standard.txt" file
-				line := color.ReadLine(file, 2+(int(currentLetter)-32)*9+i)
+				line := ascii.ReadLine(file, 2+(int(currentLetter)-32)*9+i)
 
 				// Check if the current index is within any of the grouped word ranges
 				for _, indexPair := range indices {
@@ -257,10 +257,10 @@ func main() {
 				if outflag {
 					currentLine += line
 				} else if specific && isWithinRange {
-					fmt.Print(color.ColorSelector(colorFlag) + line + color.ColorSelector("reset"))
+					fmt.Print(ascii.ColorSelector(colorFlag) + line + ascii.ColorSelector("reset"))
 					isWithinRange = false
 				} else if !specific && colorFlagCount == 1 {
-					fmt.Print(color.ColorSelector(colorFlag) + line + color.ColorSelector("reset"))
+					fmt.Print(ascii.ColorSelector(colorFlag) + line + ascii.ColorSelector("reset"))
 				} else {
 					fmt.Print(line)
 				}
@@ -274,7 +274,7 @@ func main() {
 		}
 	}
 	if outflag {
-	err := color.PrintArrayToFile(outputArray, outputFlag)
+	err := ascii.PrintArrayToFile(outputArray, outputFlag)
 		if err != nil {
 			fmt.Println("Error:", err)
 		return
